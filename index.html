@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/style.css">
+        <script src="js/steganografie.js"></script>
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+        <script src="https://rawgit.com/victornpb/f639f37373be0f6e82e1/raw/5d8f7ee8b32ae04de087d2377d8086e3389ee411/AES.js"></script>
+    <title>XKOSB</title>
+</head>
+
+<body>
+    <header>
+        <h1>Metody kódování, šifrování a bezpeč. dat <br>XKOSB</h1>
+        <h2>Autor: Radovan Němec <br>Osobní číslo: 22015</h2>
+
+        <nav>
+            <ul>
+                <li>Korespondeční úkol č.1</li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h1>Zakódování zprávy do obrázku</h1>
+            <div>
+                <input type="file" name="baseImage" 
+                onchange="displayEncodeImage()">
+            </div>
+            <div class="original hash-none">
+                <h3>Náhled obrázku</h3>
+                <span></span>
+                <canvas></canvas>
+            </div>
+        </section>
+        <section>
+            <div>
+                <h3>Zpráva k zakódování</h3>
+                <textarea rows="3" cols="42" placeholder="Zadej svoji zprávu" oninput="binaryMessage()"></textarea></textarea>
+            </div>
+        </section>
+
+     
+       
+
+
+    </main>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,6 @@
+canvas {
+    position: flex;
+    max-width: 300Px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
