@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="utf-8">
+    <title>XKOSB</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+</head>
+
+<body>
+    <script src="js/script.js"></script>
+    <header>
+        <h1>Metody kódování, šifrování a bezpeč. dat <br>XKOSB</h1>
+        <h2>Autor: Radovan Němec <br>Osobní číslo: 22015</h2>
+
+        <nav>
+            <ul>
+                <li>Korespondeční úkol č.1</li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <div id="my-tab-content" class="tab-content">
+
+        <!-- Zakódování zprávy do obrázku s možností zašifrovnání -->
+        <article id="encodeMessage">
+            <section class="decod">
+                <h1>Zakódování zprávy do obrázku</h1>
+
+                <div>
+                    <input type="file" name="baseImg" onchange="encodeImg()">
+                </div>
+                <div class="original none">
+                    <h3>Náhled obrázku</h3>
+                    <canvas></canvas>
+                </div>
+                <div>
+                    <h3>Náhled zprávy</h3>
+                    <textarea id="msg" rows="3"
+                        placeholder="Zde zadejte vaší zprávu..." oninput="binaryMsg()"></textarea>
+                </div>
+                <div class="form-group binary none">
+                    <h3>Náhled zprávy v binárním tvaru</h3>
+                    <p></p>
+                </div>
+            </section>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-lg btn-info btn-block pt-3 pb-3"
+                    onclick="event.preventDefault(); encodeMessage()">Provést zakódování</button>
+            </div>
+
+           
+
+        
+
+                    
+                
+
+
+
+
+        <script>
+            /* ==========================================: POMOCNÉ FUNKCE :========================================== */
+
+            // Vizuální úprava nadpisu podle čísla úkolu.
+            /*
+            function updateTitle(id) {
+                switch (id) {
+                    case 1:
+                        $(".page-header h1").text("Steganografie / Šifrování AES");
+                        $(".page-header h5").text("(KOSBD - 1. úkol / 2. úkol)");
+                        break;
+                    case 2:
+                        $(".page-header h1").text("Šifrování AES");
+                        $(".page-header h5").text("(KOSBD - 2. úkol)");
+                        break;
+                }
+            }
+*/
+            // Kontrola nevybraného souboru na vstupu.
+            function checkInputFile(id) {
+                if ($("input[name=" + id + "]").get(0).files.length !== 0)
+                    return 1;
+                return;
+            }
+
+            // Kontrola prázdného textového pole na vstupu.
+            function checkInputText(id) {
+                if ($(id).val() !== "")
+                    return 1;
+                return;
+            }
+
+            // Kontrola přijatelných typů souboru na vstupu.
+            function controlFileImg(file) {
+                if ($.inArray(file["type"], ["image/jpg", "image/jpeg", "image/png"]) > 0)
+                    return 1;
+                return;
+            }
+
+            // Převod znaků ASCII do binární blokové podoby.
+            function getBinaryMessage(text) {
+                var out = "";
+                for (var i = 0; i < text.length; i++) {
+                    var char = text[i].charCodeAt(0).toString(2);
+                    while (char.length < 8) {
+                        char = "0" + char;
+                    }
+                    out += char;
+                }
+                return out;
+            }
+
+            // Převod binárního řetězce na znaky ASCII.
+            function convertBinaryToString(binaryText) {
+                var out = "";
+                for (var i = 0; i < binaryText.length; i += 8) {
+                    var c = 0;
+                    for (var j = 0; j < 8; j++) {
+                        c <<= 1;
+                        c |= parseInt(binaryText[i + j]);
+                    }
+                    if (c !== 0) {
+                        out += String.fromCharCode(c);
+                    }
+                }
+                return out;
+            }
+
+            // Očištění textu od diakritiky.
+            function removeDiacritic(text) {
+                text = text.split("");
+                var special = "ÁáÉéĚěÍíÓóÚúŮůÝýŽžŠšČčŘřČčĎďŤťŇň";
+                var normal = "AaEeEeIiOoUuUuYyZzSsCcRrCcDdTtNn";
+                var out = [];
+
+                for (var i = 0; i < text.length; i++) {
+                    if (special.indexOf(text[i]) !== -1) {
+                        out[i] = normal.substr(special.indexOf(text[i]), 1);
+                    } else
+                        out[i] = text[i];
+                }
+                return out.join("");
+            }
+
+            // Kontrola průhlednosti u obrázku.
+            function checkAlphaChannel(canvas, context) {
+                var data = context.getImageData(0, 0, canvas[0].width, canvas[0].height).data;
+                for (var i = 3; i < data.length; i += 4) {
+                    if (data[i] === 0) {
+                        return 1;
+                    }
+                }
+                return;
+            }
+
+            // Převod znaků ASCII do číselné podoby.
+            function convertPasswordIntoKey(input) {
+                var out = "";
+
+                // Cyklus pro převod všech znaků na ASCII hodnoty.
+                for (var i = 0; i < input.length; i++) {
+                    out += input[i].charCodeAt(0);
+                }
+                return out;
+            }
+
+            /* ==========================================: STEGANOGRAFIE :=========================================== */
+            /* 
+                        // Náhled textu v binárním tvaru.
+                        function previewBinaryMessage() {
+                            if (checkInputText("#message")) {
+                                $(".binary p").text(getBinaryMessage(removeDiacritic($("#message").val())));
+                                $(".binary").removeClass("d-none");
+                                $(".encoded").addClass("d-none");
+            
+                                // Kontrola zapnutého šifrování.
+                                if (checkInputText("#encryptAESKey")) {
+                                    $(".binary").addClass("d-none");
+                                    previewKey();
+                                }
+                            } else {
+                                $(".encoded").addClass("d-none");
+                                $(".binary").addClass("d-none");
+                                $(".encryptMessage").addClass("d-none");
+                                $(".binaryEncryptMessage").addClass("d-none");
+                            }
+                        }
+            
+                        // Náhled originálního obrázku před zakódováním zprávy.
+                        function previewEncodeImage() {
+                            $(".original").addClass("d-none");
+                            if (checkInputFile("baseFile")) {
+                                previewImage(document.querySelector("input[name=baseFile]").files[0], ".original canvas", function () {
+                                    $(".original").removeClass("d-none");
+                                });
+                            }
+                        }
+            
+                        
+                         // Náhled obrázku se zakódovanou zprávou.
+                         function previewDecodeImage() {
+                             $(".decode").addClass("d-none");
+                             $(".binary-decode").addClass("d-none");
+                             if (checkInputFile("decodeFile")) {
+                                 previewImage(document.querySelector("input[name=decodeFile]").files[0], ".decode canvas", function () {
+                                     $(".decode").removeClass("d-none");
+                                 });
+                             } else {
+                                 $(".decode").addClass("d-none");
+                             }
+                         }
+                         */  /*
+           // Vygenerování náhledu obrázku.
+           function previewImage(file, canvasSelector, callback) {
+               var context = $(canvasSelector)[0].getContext("2d");
+               var reader = new FileReader();
+               var image = new Image;
+
+               // Kontrola formátu vstupního obrázku.
+               if (!checkFileImage(file)) {
+                   window.alert("Vybraný soubor není v platném vstupním formátu!");
+                   document.querySelector("input[name=decodeFile]").value = "";
+                   document.querySelector("input[name=baseFile]").value = "";
+                   return;
+               }
+
+               reader.readAsDataURL(file);
+               reader.onloadend = function () {
+                   image.src = URL.createObjectURL(file);
+                   image.onload = function () {
+                       $(canvasSelector).prop({
+                           "width": image.width,
+                           "height": image.height
+                       });
+                       context.drawImage(image, 0, 0);
+                       callback();
+                   };
+               };
+           }
+         
+
+           // Zakódování zprávy do obrázku.
+           function encodeMessage() {
+
+               // Kontrola obrázku na vstupu.
+               if (!checkInputFile("baseFile")) {
+                   window.alert("Nebyl detekován obrázek na vstupu!");
+                   return;
+               }
+
+               // Vstupní obrázek.
+               var originalCanvas = $(".original canvas");
+               var originalContext = originalCanvas[0].getContext("2d");
+
+               var height = originalCanvas[0].height;
+               var width = originalCanvas[0].width;
+
+               // Kontrola průhledného pozadí u obrázku na vstupu.
+               if (checkAlphaChannel(originalCanvas, originalContext)) {
+                   window.alert("Obrázek na vstupu nelze použít, protože obsahuje průhledné pozadí!");
+                   return;
+               }
+
+               // Kontrola zprávy na vstupu.
+               if (!checkInputText("#message")) {
+                   window.alert("Nebyla detekována zpráva na vstupu!");
+                   return;
+               }
+
+               // Text na vstupu.
+               var text = removeDiacritic($("#message").val());
+
+               // Kontrola existence zašifrovaného textu.
+               if (cipher !== "") {
+                   text = cipher;
+               }
+
+               // Klíčová kontrola schopnosti obrázku pojmout zakódovaný formát zprávy.
+               if ((text.length * 8) > (width * height * 3)) {
+                   window.alert("Zpráva je pro vybraný vstupní obrázek příliš dlouhá!");
+                   return;
+               }
+
+               // Pomocné plátno pro upravený vstupní obrázek.
+               var normalizedCanvas = document.createElement("canvas");
+               normalizedCanvas.height = height;
+               normalizedCanvas.width = width;
+               var normalizedContext = normalizedCanvas.getContext("2d");
+
+               // Cyklus pro úpravu vstupního obrázku.
+               var normalized = originalContext.getImageData(0, 0, width, height);
+
+               // Cyklus pro úpravu RGB dat vstupního obrázku tak, aby byly hodnoty kanálů RGB sudé.
+               for (var i = 0; i < normalized.data.length; i += 4) {
+                   for (var j = 0; j < 3; j++) {
+                       if (normalized.data[i + j] % 2 !== 0) {
+                           normalized.data[i + j]--;
+                       }
+                   }
+               }
+               normalizedContext.putImageData(normalized, 0, 0);
+
+               // Kontrolní výpis upravených vstupních obrazových dat.
+               console.info("Upravené RGBA hodnoty vstupního obrázku:");
+               console.info(normalized.data);
+
+               // Výstupní plátno.
+               var messageCanvas = $(".encoded canvas");
+               messageCanvas.prop({
+                   "width": width,
+                   "height": height
+               });
+               var messageContext = messageCanvas[0].getContext("2d");
+
+               // Cylus pro vložení zprávy v binárním tvaru do upraveného vstupního obrázku.
+               var message = normalizedContext.getImageData(0, 0, width, height);
+               for (var c = 0, i = 0; i < message.data.length; i += 4) {
+                   for (var j = 0; j < 3; j++) {
+                       if (c < getBinaryMessage(text).length) {
+                           message.data[i + j] += parseInt(getBinaryMessage(text)[c]);
+                           c++;
+                       } else {
+                           break;
+                       }
+                   }
+               }
+               messageContext.putImageData(message, 0, 0);
+               $(".encoded").removeClass("d-none");
+
+               // Kontrolní výpis obrazových dat se zakódovanou zprávou.
+               console.info("RGBA hodnoty vstupního obrázku s vloženou zprávou:");
+               console.info(message.data);
+           }
+
+           // Rozkódování zprávy z obrázku.
+           function decodeMessage() {
+
+               // Kontrola obrázku na vstupu.
+               if (!checkInputFile("decodeFile")) {
+                   window.alert("Nebyl detekován obrázek na vstupu!");
+                   return;
+               }
+
+               // Vstupní obrázek.
+               var originalCanvas = $(".decode canvas");
+               var originalContext = originalCanvas[0].getContext("2d");
+
+               // Kontrola průhledného pozadí u obrázku na vstupu.
+               if (checkAlphaChannel(originalCanvas, originalContext)) {
+                   window.alert("Obrázek na vstupu nelze použít, protože obsahuje průhledné pozadí!");
+                   return;
+               }
+
+               // Cyklus pro získání zakódované zprávy ze vstupního obrázku.
+               var message = originalContext.getImageData(0, 0, originalCanvas.width(), originalCanvas.height());
+               var binary = "";
+               for (var i = 0; i < message.data.length; i += 4) {
+                   for (var j = 0; j < 3; j++) {
+                       if (message.data[i + j] % 2 !== 0) {
+                           binary += 1;
+                       } else {
+                           binary += 0;
+                       }
+                   }
+               }
+
+               // Kontrolní výpis získáné binární zprávy.
+               console.info("Binární tvar zprávy:");
+               console.info(binary);
+
+               // Získání původního tvaru zprávy.
+               message = convertBinaryToString(binary);
+               console.info(message);
+
+               // Klíčová kontrola aktivní rozšifrovací funkce s rozšifrováním.
+               if (checkInputText("#decryptAESPassword")) {
+                   var password = convertPasswordIntoKey(removeDiacritic($("#decryptAESPassword").val()));
+                   message = Aes.Ctr.decrypt(message, password, 128);
+               }
+
+               // Výpis konečné zprávy.
+               $(".binary-decode textarea").text(message);
+               $(".binary-decode").removeClass("d-none");
+           }
+
+   */
+        </script>
+</body>
+
+</html>

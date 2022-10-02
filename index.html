@@ -30,7 +30,7 @@
             <h1>Zakódování zprávy do obrázku</h1>
             <div>
                 <input type="file" name="baseImage" 
-                onchange="displayEncodeImage()">
+                onchange="originalImage()">
             </div>
             <div class="original hash-none">
                 <h3>Náhled obrázku</h3>
@@ -39,15 +39,170 @@
             </div>
         </section>
         <section>
+            <div class="form-group">
+                <textarea class="text-break form-control" id="message" rows="3" placeholder="Zde zadejte text vaší zprávy..." oninput="previewBinaryMessage()"></textarea>
+            </div>
+            <!--
             <div>
                 <h3>Zpráva k zakódování</h3>
-                <textarea rows="3" cols="42" placeholder="Zadej svoji zprávu" oninput="binaryMessage()"></textarea></textarea>
+                <textarea class="msg" rows="3" cols="42" placeholder="Zadej zprávu" oninput="binaryMessage()"></textarea></textarea>
             </div>
-        </section>
+        -->
+        <div id="my-tab-content" class="tab-content">
 
-     
-       
+            <!-- Zakódování zprávy do obrázku s možností zašifrovnání -->
+            <div class="tab-pane active" id="encodeMessage">
+                <div class="clearfix">
 
+                    <h2 class="pt-3 pb-3">Zakódování zprávy do obrázku</h2>
+                    <div class="alert alert-info text-justify pb-0">
+                        <p>
+                            Pro zakódování zprávy je potřeba nejprve vybrat libovolný obrázek ve formátu <strong>.JPG</strong>, <strong>.JPEG</strong> a <strong>.PNG bez průhledného pozadí</strong>, do kterého budeme zprávu zakódovávat.
+                        </p>
+                        <p>
+                            Po výběru obrázku je potřeba zadat text zprávy, poté stačí zmáčknout tlačítko "<strong>Provést zakódování</strong>".
+                        </p>
+                        <p>
+                            Pomocí funkcí v jazyce JavaScript proběhne zakódování zprávy do obrázku ve formátu <strong>.PNG</strong>, který poté stačí uložit do počítače pomocí pravého kliknutí myši na obrázek a "<strong>Uložit obrázek jako...</strong>".
+                        </p>
+                        <p>
+                            <strong>Pozn.:</strong><br>
+                            Nutno myslet na to, že čím <strong>větší</strong> bude obrázek a čím <strong>delší</strong> bude zpráva na vstupu, tím <strong>delší</strong> bude průběh zakódovávání a tím <strong>větší</strong> bude velikost výsledný obrázek mít.
+                            Aplikace obsahuje řadu <strong>ošetření</strong> pro odchycení vyjímek a maximální zajištění funkčnosti.
+                        </p>
+                    </div>
+
+                    <form class="form text-center">
+                        <div class="form-group">
+                            <input class="form-control-file border rounded-right" type="file" name="baseFile" onchange="previewEncodeImage()">
+                        </div>
+                        <div class="original d-none">
+                            <h3 class="pt-1">Náhled vstupního obrázku</h3>
+                            <canvas class="mw-100 pt-3 pb-4"></canvas>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="text-break form-control" id="message" rows="3" placeholder="Zde zadejte text vaší zprávy..." oninput="previewBinaryMessage()"></textarea>
+                        </div>
+                        <div class="form-group binary d-none">
+                            <h3 class="pt-1 pb-2">Náhled binárního tvaru zprávy</h3>
+                            <p class="text-break text-white rounded bg-dark p-3"></p>
+                        </div>
+
+                        <h2 class="text-justify pt-2 pb-3">Zašifrování zprávy</h2>
+                        <div class="alert alert-info text-justify pb-0">
+                            <p>
+                                Pro zašifrování zakódovávané zprávy do obrázku je potřeba nejprve vybrat obrázek dle požadavků uvedených v <strong>1. odstavci</strong>.
+                            </p>
+                            <p>
+                                Po výběru obrázku a zadání zprávy je třeba aktivovat šifrovací funkci <strong>zaškrtnutím pole pod odstavcem</strong>.
+                            </p>
+                            <p>
+                                Zvolíme si heslo pro zašifrování a po jeho ověření stačí pouze zmáčknout tlačítko "<strong>Provést zakódování se zašifrováním</strong>".
+                            </p>
+                            <p>
+                                <strong>Pozn.:</strong><br>
+                                Nutno myslet na to, že pro následné rozšifrování zprávy je nutné si <strong>pamatovat</strong> zvolené heslo při zašifrování.
+                                Rozšíření obsahuje řadu <strong>ošetření</strong> pro odchycení vyjímek a maximální zajištění funkčnosti.
+                            </p>
+                        </div>
+
+                        <!-- Aktivace zašifrování -->
+                        <h5 class="pt-2 pb-2 text-justify">
+                            Aktivace rozšíření pro zašifrování
+                        </h5>
+                        <div class="form-group input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <input type="checkbox" id="encryptAES" onclick="toggleEncryptAES()">
+                                </div>
+                            </div>
+                            <input type="text" class="form-control" id="encryptAESPassword" readonly oninput="previewKey()">
+                        </div>
+                        <div class="form-group encryptKey d-none">
+                            <h3 class="pt-1 pb-2">Náhled číselného tvaru hesla na pozadí</h3>
+                            <p class="text-break text-white rounded bg-dark p-3"></p>
+                        </div>
+                        <div class="form-group encryptMessage d-none">
+                            <h3 class="pt-1 pb-2">Náhled zašifrované zprávy</h3>
+                            <p class="text-break text-white rounded bg-dark p-3"></p>
+                        </div>
+                        <div class="form-group binaryEncryptMessage d-none">
+                            <h3 class="pt-1 pb-2">Náhled binárního tvaru zašifrované zprávy</h3>
+                            <p class="text-break text-white rounded bg-dark p-3"></p>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-lg btn-info btn-block pt-3 pb-3" onclick="event.preventDefault(); encodeMessage()">Provést zakódování</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="encoded text-center d-none">
+                    <h3>Výstupní obrázek s tajnou zprávou</h3>
+                    <canvas class="mw-100 pt-3 pb-3"></canvas>
+                </div>
+            </div>
+
+            <!-- Rozkódování zprávy z obrázku s možností rozšifrování -->
+            <div class="tab-pane" id="decodeMessage">
+                <div class="clearfix">
+
+                    <h2 class="pt-3 pb-3">Rozkódování zprávy z obrázku</h2>
+                    <div class="alert alert-info text-justify pb-0">
+                        <p>
+                            Pro rozkódování zprávy je potřeba nejprve vybrat vstupní obrázek, ideálně se zakódovanou zprávou.
+                        </p>
+                        <p>
+                            Po výběru obrázku stačí pouze zmáčknout tlačítko "<strong>Provést rozkódování</strong>".
+                        </p>
+                    </div>
+
+                    <form class="form text-center">
+                        <div class="form-group">
+                            <input class="form-control-file border rounded-right" type="file" name="decodeFile" onchange="previewDecodeImage()">
+                        </div>
+                        <div class="decode d-none">
+                            <h3 class="pt-1">Náhled vstupního obrázku</h3>
+                            <canvas class="mw-100 pt-3 pb-4"></canvas>
+                        </div>
+
+                        <h2 class="text-justify pt-2 pb-3">Rozšifrování zprávy</h2>
+                        <div class="alert alert-info text-justify pb-0">
+                            <p>
+                                Pokud zpráva po rozkódování nedává smysl, je možné, že byla před vložením <strong>zašifrována</strong>.
+                            </p>
+                            <p>
+                                Pro rozšifrování zprávy je potřeba nejprve vybrat obrázek dle požadavků uvedených v <strong>1. odstavci</strong>.                                   
+                            </p>
+                            <p>
+                                Po výběru obrázku je třeba aktivovat rozšifrovací funkci <strong>zaškrtnutím pole pod odstavcem</strong>.
+                            </p>
+                            <p>
+                                Zadáme heslo, které bylo použito při zašifrování a poté stačí pouze zmáčknout tlačítko "<strong>Provést rozkódování s rozšifrováním</strong>".
+                            </p>
+                        </div>
+
+                        <h5 class="pt-2 pb-2 text-justify">
+                            Aktivace rozšíření pro rozšifrování
+                        </h5>
+                        <div class="form-group input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <input type="checkbox" id="decryptAES" onclick="toggleDecryptAES()">
+                                </div>
+                            </div>
+                            <input type="text" class="form-control" id="decryptAESPassword" readonly onchange="$('.binary-decode').addClass('d-none')">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-lg btn-info btn-block pt-3 pb-3" onclick="event.preventDefault(); decodeMessage()">Provést rozkódování</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="binary-decode text-center d-none">
+                    <h3 class="pt-3 pb-3">Výstupní zpráva</h3>
+                    <textarea class="text-break form-control text-white bg-dark" rows="3" readonly></textarea>
+                </div>
+            </div>
 
     </main>
 
