@@ -80,6 +80,9 @@ header h2 {
     transition: all 500ms ease;
   }
 
+.none {
+  display: none;
+}
 
 main {
     display: block;
