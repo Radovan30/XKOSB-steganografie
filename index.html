@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="cs">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/style.css">
-        <script src="js/steganografie.js"></script>
-        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-
-        <script src="https://rawgit.com/victornpb/f639f37373be0f6e82e1/raw/5d8f7ee8b32ae04de087d2377d8086e3389ee411/AES.js"></script>
+<head>
+    <meta charset="utf-8">
     <title>XKOSB</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
 </head>
 
 <body>
+    <script src="js/heplerFun.js"></script>
+    <script src="js/steganografie.js"></script>
     <header>
         <h1>Metody kódování, šifrování a bezpeč. dat <br>XKOSB</h1>
         <h2>Autor: Radovan Němec <br>Osobní číslo: 22015</h2>
@@ -25,189 +24,272 @@
         </nav>
     </header>
 
-    <main>
-        <section>
+    <!-- ZAKODOVANI ZPRAVY DO OBRAZKU -->
+
+    <article id="encodeMessage" class="code">
+        <section class="decod">
             <h1>Zakódování zprávy do obrázku</h1>
+
             <div>
-                <input type="file" name="baseImage" 
-                onchange="originalImage()">
+                <input type="file" name="baseImg" onchange="encodeImg()">
             </div>
-            <div class="original hash-none">
+            <div class="original none">
                 <h3>Náhled obrázku</h3>
-                <span></span>
+                <canvas></canvas>
+            </div>
+            <div>
+                <h3>Náhled textové zprávy</h3>
+                <textarea id="msg" rows="3" placeholder="Zde zadejte vaší zprávu..." oninput="binaryMsg()"></textarea>
+            </div>
+            <div class="binary none">
+                <h3>Náhled zprávy v binárním tvaru</h3>
+                <p></p>
+            </div>
+            <div>
+                <button type="button" onclick="event.preventDefault(); encodeMessage()">Provést zakódování</button>
+            </div>
+        </section>
+
+        <section>
+            <div class="encoded none">
+                <h3>Výstupní obrázek se zašifrovánou zprávou</h3>
                 <canvas></canvas>
             </div>
         </section>
-        <section>
-            <div class="form-group">
-                <textarea class="text-break form-control" id="message" rows="3" placeholder="Zde zadejte text vaší zprávy..." oninput="previewBinaryMessage()"></textarea>
-            </div>
-            <!--
-            <div>
-                <h3>Zpráva k zakódování</h3>
-                <textarea class="msg" rows="3" cols="42" placeholder="Zadej zprávu" oninput="binaryMessage()"></textarea></textarea>
-            </div>
-        -->
-        <div id="my-tab-content" class="tab-content">
 
-            <!-- Zakódování zprávy do obrázku s možností zašifrovnání -->
-            <div class="tab-pane active" id="encodeMessage">
-                <div class="clearfix">
+    </article>
 
-                    <h2 class="pt-3 pb-3">Zakódování zprávy do obrázku</h2>
-                    <div class="alert alert-info text-justify pb-0">
-                        <p>
-                            Pro zakódování zprávy je potřeba nejprve vybrat libovolný obrázek ve formátu <strong>.JPG</strong>, <strong>.JPEG</strong> a <strong>.PNG bez průhledného pozadí</strong>, do kterého budeme zprávu zakódovávat.
-                        </p>
-                        <p>
-                            Po výběru obrázku je potřeba zadat text zprávy, poté stačí zmáčknout tlačítko "<strong>Provést zakódování</strong>".
-                        </p>
-                        <p>
-                            Pomocí funkcí v jazyce JavaScript proběhne zakódování zprávy do obrázku ve formátu <strong>.PNG</strong>, který poté stačí uložit do počítače pomocí pravého kliknutí myši na obrázek a "<strong>Uložit obrázek jako...</strong>".
-                        </p>
-                        <p>
-                            <strong>Pozn.:</strong><br>
-                            Nutno myslet na to, že čím <strong>větší</strong> bude obrázek a čím <strong>delší</strong> bude zpráva na vstupu, tím <strong>delší</strong> bude průběh zakódovávání a tím <strong>větší</strong> bude velikost výsledný obrázek mít.
-                            Aplikace obsahuje řadu <strong>ošetření</strong> pro odchycení vyjímek a maximální zajištění funkčnosti.
-                        </p>
-                    </div>
-
-                    <form class="form text-center">
-                        <div class="form-group">
-                            <input class="form-control-file border rounded-right" type="file" name="baseFile" onchange="previewEncodeImage()">
-                        </div>
-                        <div class="original d-none">
-                            <h3 class="pt-1">Náhled vstupního obrázku</h3>
-                            <canvas class="mw-100 pt-3 pb-4"></canvas>
-                        </div>
-                        <div class="form-group">
-                            <textarea class="text-break form-control" id="message" rows="3" placeholder="Zde zadejte text vaší zprávy..." oninput="previewBinaryMessage()"></textarea>
-                        </div>
-                        <div class="form-group binary d-none">
-                            <h3 class="pt-1 pb-2">Náhled binárního tvaru zprávy</h3>
-                            <p class="text-break text-white rounded bg-dark p-3"></p>
-                        </div>
-
-                        <h2 class="text-justify pt-2 pb-3">Zašifrování zprávy</h2>
-                        <div class="alert alert-info text-justify pb-0">
-                            <p>
-                                Pro zašifrování zakódovávané zprávy do obrázku je potřeba nejprve vybrat obrázek dle požadavků uvedených v <strong>1. odstavci</strong>.
-                            </p>
-                            <p>
-                                Po výběru obrázku a zadání zprávy je třeba aktivovat šifrovací funkci <strong>zaškrtnutím pole pod odstavcem</strong>.
-                            </p>
-                            <p>
-                                Zvolíme si heslo pro zašifrování a po jeho ověření stačí pouze zmáčknout tlačítko "<strong>Provést zakódování se zašifrováním</strong>".
-                            </p>
-                            <p>
-                                <strong>Pozn.:</strong><br>
-                                Nutno myslet na to, že pro následné rozšifrování zprávy je nutné si <strong>pamatovat</strong> zvolené heslo při zašifrování.
-                                Rozšíření obsahuje řadu <strong>ošetření</strong> pro odchycení vyjímek a maximální zajištění funkčnosti.
-                            </p>
-                        </div>
-
-                        <!-- Aktivace zašifrování -->
-                        <h5 class="pt-2 pb-2 text-justify">
-                            Aktivace rozšíření pro zašifrování
-                        </h5>
-                        <div class="form-group input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <input type="checkbox" id="encryptAES" onclick="toggleEncryptAES()">
-                                </div>
-                            </div>
-                            <input type="text" class="form-control" id="encryptAESPassword" readonly oninput="previewKey()">
-                        </div>
-                        <div class="form-group encryptKey d-none">
-                            <h3 class="pt-1 pb-2">Náhled číselného tvaru hesla na pozadí</h3>
-                            <p class="text-break text-white rounded bg-dark p-3"></p>
-                        </div>
-                        <div class="form-group encryptMessage d-none">
-                            <h3 class="pt-1 pb-2">Náhled zašifrované zprávy</h3>
-                            <p class="text-break text-white rounded bg-dark p-3"></p>
-                        </div>
-                        <div class="form-group binaryEncryptMessage d-none">
-                            <h3 class="pt-1 pb-2">Náhled binárního tvaru zašifrované zprávy</h3>
-                            <p class="text-break text-white rounded bg-dark p-3"></p>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-lg btn-info btn-block pt-3 pb-3" onclick="event.preventDefault(); encodeMessage()">Provést zakódování</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="encoded text-center d-none">
-                    <h3>Výstupní obrázek s tajnou zprávou</h3>
-                    <canvas class="mw-100 pt-3 pb-3"></canvas>
-                </div>
-            </div>
-
-            <!-- Rozkódování zprávy z obrázku s možností rozšifrování -->
-            <div class="tab-pane" id="decodeMessage">
-                <div class="clearfix">
-
-                    <h2 class="pt-3 pb-3">Rozkódování zprávy z obrázku</h2>
-                    <div class="alert alert-info text-justify pb-0">
-                        <p>
-                            Pro rozkódování zprávy je potřeba nejprve vybrat vstupní obrázek, ideálně se zakódovanou zprávou.
-                        </p>
-                        <p>
-                            Po výběru obrázku stačí pouze zmáčknout tlačítko "<strong>Provést rozkódování</strong>".
-                        </p>
-                    </div>
-
-                    <form class="form text-center">
-                        <div class="form-group">
-                            <input class="form-control-file border rounded-right" type="file" name="decodeFile" onchange="previewDecodeImage()">
-                        </div>
-                        <div class="decode d-none">
-                            <h3 class="pt-1">Náhled vstupního obrázku</h3>
-                            <canvas class="mw-100 pt-3 pb-4"></canvas>
-                        </div>
-
-                        <h2 class="text-justify pt-2 pb-3">Rozšifrování zprávy</h2>
-                        <div class="alert alert-info text-justify pb-0">
-                            <p>
-                                Pokud zpráva po rozkódování nedává smysl, je možné, že byla před vložením <strong>zašifrována</strong>.
-                            </p>
-                            <p>
-                                Pro rozšifrování zprávy je potřeba nejprve vybrat obrázek dle požadavků uvedených v <strong>1. odstavci</strong>.                                   
-                            </p>
-                            <p>
-                                Po výběru obrázku je třeba aktivovat rozšifrovací funkci <strong>zaškrtnutím pole pod odstavcem</strong>.
-                            </p>
-                            <p>
-                                Zadáme heslo, které bylo použito při zašifrování a poté stačí pouze zmáčknout tlačítko "<strong>Provést rozkódování s rozšifrováním</strong>".
-                            </p>
-                        </div>
-
-                        <h5 class="pt-2 pb-2 text-justify">
-                            Aktivace rozšíření pro rozšifrování
-                        </h5>
-                        <div class="form-group input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <input type="checkbox" id="decryptAES" onclick="toggleDecryptAES()">
-                                </div>
-                            </div>
-                            <input type="text" class="form-control" id="decryptAESPassword" readonly onchange="$('.binary-decode').addClass('d-none')">
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-lg btn-info btn-block pt-3 pb-3" onclick="event.preventDefault(); decodeMessage()">Provést rozkódování</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="binary-decode text-center d-none">
-                    <h3 class="pt-3 pb-3">Výstupní zpráva</h3>
-                    <textarea class="text-break form-control text-white bg-dark" rows="3" readonly></textarea>
-                </div>
-            </div>
-
-    </main>
+<!-- DEKODOVANI ZPRAVY Z OBRAZKU -->
 
 
 
+
+
+
+
+    <script>
+        
+        /* ==========================================: STEGANOGRAFIE :=========================================== */
+        /*
+                    // Náhled textu v binárním tvaru.
+                    function previewBinaryMessage() {
+                        if (checkInputText("#message")) {
+                            $(".binary p").text(getBinaryMessage(removeDiacritic($("#message").val())));
+                            $(".binary").removeClass("d-none");
+                            $(".encoded").addClass("d-none");
+        
+                            // Kontrola zapnutého šifrování.
+                            if (checkInputText("#encryptAESKey")) {
+                                $(".binary").addClass("d-none");
+                                previewKey();
+                            }
+                        } else {
+                            $(".encoded").addClass("d-none");
+                            $(".binary").addClass("d-none");
+                            $(".encryptMessage").addClass("d-none");
+                            $(".binaryEncryptMessage").addClass("d-none");
+                        }
+                    }
+        
+                    // Náhled originálního obrázku před zakódováním zprávy.
+                    function previewEncodeImage() {
+                        $(".original").addClass("d-none");
+                        if (checkInputFile("baseFile")) {
+                            previewImage(document.querySelector("input[name=baseFile]").files[0], ".original canvas", function () {
+                                $(".original").removeClass("d-none");
+                            });
+                        }
+                    }
+        
+                    
+                     // Náhled obrázku se zakódovanou zprávou.
+                     function previewDecodeImage() {
+                         $(".decode").addClass("d-none");
+                         $(".binary-decode").addClass("d-none");
+                         if (checkInputFile("decodeFile")) {
+                             previewImage(document.querySelector("input[name=decodeFile]").files[0], ".decode canvas", function () {
+                                 $(".decode").removeClass("d-none");
+                             });
+                         } else {
+                             $(".decode").addClass("d-none");
+                         }
+                     }
+                     */  /*
+// Vygenerování náhledu obrázku.
+function previewImage(file, canvasSelector, callback) {
+var context = $(canvasSelector)[0].getContext("2d");
+var reader = new FileReader();
+var image = new Image;
+
+// Kontrola formátu vstupního obrázku.
+if (!checkFileImage(file)) {
+window.alert("Vybraný soubor není v platném vstupním formátu!");
+document.querySelector("input[name=decodeFile]").value = "";
+document.querySelector("input[name=baseFile]").value = "";
+return;
+}
+
+reader.readAsDataURL(file);
+reader.onloadend = function () {
+image.src = URL.createObjectURL(file);
+image.onload = function () {
+$(canvasSelector).prop({
+"width": image.width,
+"height": image.height
+});
+context.drawImage(image, 0, 0);
+callback();
+};
+};
+}
+ 
+
+// Zakódování zprávy do obrázku.
+function encodeMessage() {
+
+// Kontrola obrázku na vstupu.
+if (!checkInputFile("baseFile")) {
+window.alert("Nebyl detekován obrázek na vstupu!");
+return;
+}
+
+// Vstupní obrázek.
+var originalCanvas = $(".original canvas");
+var originalContext = originalCanvas[0].getContext("2d");
+
+var height = originalCanvas[0].height;
+var width = originalCanvas[0].width;
+
+// Kontrola průhledného pozadí u obrázku na vstupu.
+if (checkAlphaChannel(originalCanvas, originalContext)) {
+window.alert("Obrázek na vstupu nelze použít, protože obsahuje průhledné pozadí!");
+return;
+}
+
+// Kontrola zprávy na vstupu.
+if (!checkInputText("#message")) {
+window.alert("Nebyla detekována zpráva na vstupu!");
+return;
+}
+
+// Text na vstupu.
+var text = removeDiacritic($("#message").val());
+
+// Kontrola existence zašifrovaného textu.
+if (cipher !== "") {
+text = cipher;
+}
+
+// Klíčová kontrola schopnosti obrázku pojmout zakódovaný formát zprávy.
+if ((text.length * 8) > (width * height * 3)) {
+window.alert("Zpráva je pro vybraný vstupní obrázek příliš dlouhá!");
+return;
+}
+
+// Pomocné plátno pro upravený vstupní obrázek.
+var normalizedCanvas = document.createElement("canvas");
+normalizedCanvas.height = height;
+normalizedCanvas.width = width;
+var normalizedContext = normalizedCanvas.getContext("2d");
+
+// Cyklus pro úpravu vstupního obrázku.
+var normalized = originalContext.getImageData(0, 0, width, height);
+
+// Cyklus pro úpravu RGB dat vstupního obrázku tak, aby byly hodnoty kanálů RGB sudé.
+for (var i = 0; i < normalized.data.length; i += 4) {
+for (var j = 0; j < 3; j++) {
+if (normalized.data[i + j] % 2 !== 0) {
+normalized.data[i + j]--;
+}
+}
+}
+normalizedContext.putImageData(normalized, 0, 0);
+
+// Kontrolní výpis upravených vstupních obrazových dat.
+console.info("Upravené RGBA hodnoty vstupního obrázku:");
+console.info(normalized.data);
+
+// Výstupní plátno.
+var messageCanvas = $(".encoded canvas");
+messageCanvas.prop({
+"width": width,
+"height": height
+});
+var messageContext = messageCanvas[0].getContext("2d");
+
+// Cylus pro vložení zprávy v binárním tvaru do upraveného vstupního obrázku.
+var message = normalizedContext.getImageData(0, 0, width, height);
+for (var c = 0, i = 0; i < message.data.length; i += 4) {
+for (var j = 0; j < 3; j++) {
+if (c < getBinaryMessage(text).length) {
+message.data[i + j] += parseInt(getBinaryMessage(text)[c]);
+c++;
+} else {
+break;
+}
+}
+}
+messageContext.putImageData(message, 0, 0);
+$(".encoded").removeClass("d-none");
+
+// Kontrolní výpis obrazových dat se zakódovanou zprávou.
+console.info("RGBA hodnoty vstupního obrázku s vloženou zprávou:");
+console.info(message.data);
+}
+
+// Rozkódování zprávy z obrázku.
+function decodeMessage() {
+
+// Kontrola obrázku na vstupu.
+if (!checkInputFile("decodeFile")) {
+window.alert("Nebyl detekován obrázek na vstupu!");
+return;
+}
+
+// Vstupní obrázek.
+var originalCanvas = $(".decode canvas");
+var originalContext = originalCanvas[0].getContext("2d");
+
+// Kontrola průhledného pozadí u obrázku na vstupu.
+if (checkAlphaChannel(originalCanvas, originalContext)) {
+window.alert("Obrázek na vstupu nelze použít, protože obsahuje průhledné pozadí!");
+return;
+}
+
+// Cyklus pro získání zakódované zprávy ze vstupního obrázku.
+var message = originalContext.getImageData(0, 0, originalCanvas.width(), originalCanvas.height());
+var binary = "";
+for (var i = 0; i < message.data.length; i += 4) {
+for (var j = 0; j < 3; j++) {
+if (message.data[i + j] % 2 !== 0) {
+binary += 1;
+} else {
+binary += 0;
+}
+}
+}
+
+// Kontrolní výpis získáné binární zprávy.
+console.info("Binární tvar zprávy:");
+console.info(binary);
+
+// Získání původního tvaru zprávy.
+message = convertBinaryToString(binary);
+console.info(message);
+
+// Klíčová kontrola aktivní rozšifrovací funkce s rozšifrováním.
+if (checkInputText("#decryptAESPassword")) {
+var password = convertPasswordIntoKey(removeDiacritic($("#decryptAESPassword").val()));
+message = Aes.Ctr.decrypt(message, password, 128);
+}
+
+// Výpis konečné zprávy.
+$(".binary-decode textarea").text(message);
+$(".binary-decode").removeClass("d-none");
+}
+
+*/
+    </script>
 </body>
 
 </html>
