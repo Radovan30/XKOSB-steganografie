@@ -12,6 +12,7 @@
 
 <body>
     <script src="js/script.js"></script>
+    <script src="js/heplerFun.js"></script>
     <header>
         <h1>Metody kódování, šifrování a bezpeč. dat <br>XKOSB</h1>
         <h2>Autor: Radovan Němec <br>Osobní číslo: 22015</h2>
@@ -39,7 +40,7 @@
                     <canvas></canvas>
                 </div>
                 <div>
-                    <h3>Náhled zprávy</h3>
+                    <h3>Náhled textové zprávy</h3>
                     <textarea id="msg" rows="3"
                         placeholder="Zde zadejte vaší zprávu..." oninput="binaryMsg()"></textarea>
                 </div>
@@ -49,10 +50,45 @@
                 </div>
             </section>
 
-            <div class="form-group">
-                <button type="button" class="btn btn-lg btn-info btn-block pt-3 pb-3"
+            <!-- Aktivace zašifrování 
+            <h5 class="pt-2 pb-2 text-justify">
+                Aktivace rozšíření pro zašifrování
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" id="encryptAES" onclick="toggleEncryptAES()">
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" id="encryptAESPassword" readonly
+                        oninput="previewKey()">
+                </div>
+            
+            <div class="encryptKey none">
+                <h3>Náhled číselného tvaru hesla na pozadí</h3>
+                <p></p>
+            </div>
+            <div class="encryptMessage none">
+                <h3>Náhled zašifrované zprávy</h3>
+                <p></p>
+            </div>
+            <div class="binaryEncryptMessage none">
+                <h3>Náhled binárního tvaru zašifrované zprávy</h3>
+                <p></p>
+            </div>
+            -->
+            <div>
+                <button type="button"
                     onclick="event.preventDefault(); encodeMessage()">Provést zakódování</button>
             </div>
+        </form>
+    </div>
+
+    <div class="encoded text-center d-none">
+        <h3>Výstupní obrázek se zašifrovánou zprávou</h3>
+        <canvas></canvas>
+    </div>
+</div>
+            
 
            
 
@@ -82,6 +118,10 @@
                 }
             }
 */
+
+
+
+
             // Kontrola nevybraného souboru na vstupu.
             function checkInputFile(id) {
                 if ($("input[name=" + id + "]").get(0).files.length !== 0)

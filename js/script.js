@@ -44,17 +44,9 @@ function binaryMsg() {
         $(".binary p").text(getBinaryMessage(removeDiacritic($("#msg").val())));
         $(".binary").removeClass("none");
         $(".encoded").addClass("none");
-
-        // kontrola pro zapnute sifrovani
-        if (checkInputText("#encryptAESKey")) {
-            $(".binary").addClass("none");
-            encryptKey();
-        }
     } else {
         $(".encoded").addClass("none");
         $(".binary").addClass("none");
-        $(".encryptMessage").addClass("none");
-        $(".binaryEncryptMessage").addClass("none");
     }
 }
 
@@ -93,6 +85,7 @@ function encodeMessage() {
     if (cipher !== "") {
         text = cipher;
     }
+
 
     // kontrola zda dokaze obrazek pojmout zakodovanou zpavu
     if ((text.length * 8) > (width * height * 3)) {
@@ -150,3 +143,9 @@ function encodeMessage() {
     console.info("RGBA hodnoty vstupního obrázku s vloženou zprávou:");
     console.info(msg.data);
 }
+
+/* ----   AES ŠIFROVÁNÍ   -----  */
+
+// Klíčová proměnná se zašifrovanou zprávou pro lepší manipulaci napříč funkcemi.
+var cipher = "";
+
