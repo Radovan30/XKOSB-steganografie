@@ -1,4 +1,6 @@
-//  CAST SKRIPTU PRO ZASIFROVANI OBRAZKU 
+// ---------------------------------------
+//  1.CAST SKRIPTU PRO ZASIFROVANI OBRAZKU 
+// ---------------------------------------
 
 // funkce pro vygeberovani nahledu
 function displayImg(file, canvasSelector, ret) {
@@ -6,7 +8,7 @@ function displayImg(file, canvasSelector, ret) {
     let read = new FileReader();
     let img = new Image;
 
-    // kontorla formatu souboru
+    // kontorla formatu obrazku/souboru
     if (!controlFileImg(file)) {
         window.alert("Vybraný soubor není obrazek, nebo nesplňuje povolený format!");
         document.querySelector("input[name=decodeFile]").value = "";
@@ -58,7 +60,7 @@ function encodeMessage() {
         return;
     }
 
-    // vstubni obrazek
+    // vstupni obrazek
     let originalCanvas = $(".original canvas");
     let originalContext = originalCanvas[0].getContext("2d");
 
@@ -71,14 +73,14 @@ function encodeMessage() {
         return;
     }
 
-    // kontrola jestli byla zadana zprava
+    // kontrola zadani zpravy do textoveho pole
     if (!wiewInputText("#msg")) {
         window.alert("Nebyla zadana žádna zpráva k zašifrování!");
         return;
     }
 
-    // text na vzstupu
-    var text = substitutionDiacritic($("#msg").val());
+    // text na vstupu
+    let text = substitutionDiacritic($("#msg").val());
 
     // kontrola pro existenci zasifrovaneho textu
     if (cipher !== "") {
@@ -115,17 +117,17 @@ function encodeMessage() {
     console.info(normalize.data);
 
     // vystupni platno obrazku
-    var msgCanvas = $(".encoded canvas");
+    let msgCanvas = $(".encoded canvas");
     msgCanvas.prop({
         "width": width,
         "height": height
     });
-    var msgContext = msgCanvas[0].getContext("2d");
+    let msgContext = msgCanvas[0].getContext("2d");
 
     // cylus pro vlozeni binarni zpravy do obrazku
     let msg = normalizeContext.getImageData(0, 0, width, height);
-    for (var c = 0, i = 0; i < msg.data.length; i += 4) {
-        for (var j = 0; j < 3; j++) {
+    for (let c = 0, i = 0; i < msg.data.length; i += 4) {
+        for (let j = 0; j < 3; j++) {
             if (c < getBinaryMsg(text).length) {
                 msg.data[i + j] += parseInt(getBinaryMsg(text)[c]);
                 c++;
@@ -143,8 +145,66 @@ function encodeMessage() {
 }
 
 // Klíčová proměnná se zašifrovanou zprávou pro lepší manipulaci napříč funkcemi.
-var cipher = "";
+let cipher = "";
 
 
+// ---------------------------------------
+//  2.CAST SKRIPTU PRO ROZSIFROVANI OBRAZKU
+// ---------------------------------------
 
-//  CAST SKRIPTU PRO ROZSIFROVANI OBRAZKU 
+ // nahled obrazku se zakodovanou zpravou
+ function encodeImage() {
+    $(".decode").addClass("none");
+    $(".binary-decode").addClass("none");
+    if (controlInputFile("decodeFile")) {
+        displayImg(document.querySelector("input[name=decodeFile]").files[0], ".decode canvas", function () {
+            $(".decode").removeClass("none");
+        });
+    } else {
+        $(".decode").addClass("none");
+    }
+}
+
+// rozkodovani zpravy z obrazku
+function decodeMsg() {
+    // kontrola nahraneho obrazku/souboru
+    if (!controlInputFile("decodeFile")) {
+        window.alert("Nebyl nahrán žádný obrázek!");
+        return;
+    }
+
+    // vstupni obrazek/soubor
+    let originalCanvas = $(".decode canvas");
+    let originalContext = originalCanvas[0].getContext("2d");
+
+    // kontorla pruhlednosti pozadi u obrazku/souboru
+    if (controlAlphaChannel(originalCanvas, originalContext)) {
+        window.alert("Obrázek na vstupu nelze použít, protože obsahuje průhledné pozadí!");
+        return;
+    }
+
+    // cyklus pro ziskani zakodovane zpravy ze vstupniho obrazku/souboru
+    let msg = originalContext.getImageData(0, 0, originalCanvas.width(), originalCanvas.height());
+    let binary = "";
+    for (let i = 0; i < msg.data.length; i += 4) {
+        for (let j = 0; j < 3; j++) {
+            if (msg.data[i + j] % 2 !== 0) {
+                binary += 1;
+            } else {
+                binary += 0;
+            }
+        }
+    }
+
+    // vypis do konzole pro kontrolu binarni zpavy
+    console.info("Binární tvar zprávy:");
+    console.info(binary);
+
+    // ziskani puvodni zpravy
+    msg = convertBinaryToString(binary);
+    console.info(msg);
+
+    // vypis desifrovane zpravy
+    $(".binary-decode textarea").text(msg);
+    $(".binary-decode").removeClass("none");
+}
