@@ -5,33 +5,36 @@
     <meta charset="utf-8">
     <title>XKOSB</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css"> 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-
 </head>
 
 <body>
+    <script src="js/navBar.js"></script>
     <script src="js/heplerFun.js"></script>
     <script src="js/steganografie.js"></script>
+
     <header>
         <h1>Metody kódování, šifrování a bezpeč. dat <br>XKOSB</h1>
         <h2>Autor: Radovan Němec <br>Osobní číslo: 22015</h2>
 
-        <nav>
-            <ul>
-                <li>Korespondeční úkol č.1</li>
+        <nav class="navbar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a class="nav-link active" href="index.html">Korespondeční úkol č.1</a>
+                </li>
             </ul>
         </nav>
     </header>
 
     <!-- ZAKODOVANI ZPRAVY DO OBRAZKU -->
 
-    <article id="encodeMessage" class="art-code">
-        <section class="decod">
+    <article id="encodeMessage" class="art">
+        <section class="one">
             <h1>Zakódování zprávy do obrázku</h1>
 
             <div>
-                <input type="file" name="baseImg" onchange="encodeImg()">
+                <input class="inputfile" type="file" name="baseImg" onchange="encodeImg()">
             </div>
             <div class="original none">
                 <h3>Náhled obrázku</h3>
@@ -39,7 +42,7 @@
             </div>
             <div>
                 <h3>Náhled textové zprávy</h3>
-                <textarea id="msg" rows="3" placeholder="Zde zadejte vaší zprávu..." oninput="binaryMsg()"></textarea>
+                <textarea id="msg" rows="3" cols="29" placeholder="Zde zadejte vaší zprávu..." oninput="binaryMsg()"></textarea>
             </div>
             <div class="binary none">
                 <h3>Náhled zprávy v binárním tvaru</h3>
@@ -48,9 +51,6 @@
             <div>
                 <button type="button" onclick="event.preventDefault(); encodeMessage()">Provést zakódování</button>
             </div>
-        </section>
-
-        <section>
             <div class="encoded none">
                 <h3>Výstupní obrázek se zašifrovánou zprávou</h3>
                 <canvas></canvas>
@@ -59,34 +59,33 @@
 
     </article>
 
-<!-- DEKODOVANI ZPRAVY Z OBRAZKU -->
+    <!-- DEKODOVANI ZPRAVY Z OBRAZKU -->
 
-    <article class="art-decode" id="decodeMsg">
+    <article class="art" id="decodeMsg">
+        <section class="two">
 
-                <h2>Rozkódování zprávy z obrázku</h2>
-                
-                    <div>
-                        <input class="" type="file" name="decodeFile" onchange="encodeImage()">
-                    </div>
-                    <div class="decode none">
-                        <h3>Náhled vstupního obrázku</h3>
-                        <canvas></canvas>
-                    </div>
+            <h2>Rozkódování zprávy z obrázku</h2>
 
-                    <div>
-                        <button class="btn-block" onclick="event.preventDefault(); decodeMsg()">Provést rozkódování</button>
-                    </div>
-               
-       
+            <div>
+                <input class="input-file" type="file" name="decodeFile" onchange="encodeImage()">
+            </div>
+            <div class="decode none">
+                <h3>Náhled vstupního obrázku</h3>
+                <canvas></canvas>
+            </div>
+
+            <div>
+                <button type="button" event.preventDefault(); decodeMsg()>Provést rozkódování</button>
+            </div>
+
 
             <div class="binary-decode none">
                 <h3>Výstupní zpráva</h3>
-                <textarea class="text-break form-control text-white bg-dark" rows="3" readonly></textarea>
+                <textarea class="" rows="3" cols="29" readonly></textarea>
             </div>
-        
 
+        </section>
     </article>
 
 </body>
-
 </html>
