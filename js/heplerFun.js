@@ -2,6 +2,7 @@
 //  SKRIP S POMOCNYMI FUNKCEMI PRO KONTROKU A UPRAVU DAT
 // ------------------------------------------------------
 
+
 // prevod znaku ASCII do binarni soustavy
 function getBinaryMsg(text) {
     let ret = "";
@@ -14,6 +15,7 @@ function getBinaryMsg(text) {
     }
     return ret;
 }
+
 
 // prevod binarni soustavy/retezce na znaky ASCII
 function convertBinaryToString(binaryText) {
@@ -31,6 +33,7 @@ function convertBinaryToString(binaryText) {
     return ret;
 }
 
+
 // prevod znaku ASCII na cislo
 function convertPasswordIntoKey(input) {
     let ret = "";
@@ -41,6 +44,7 @@ function convertPasswordIntoKey(input) {
     }
     return ret;
 }
+
 
 // Odstraneni diakritiky
 function substitutionDiacritic(text) {
@@ -66,12 +70,14 @@ function controlInputFile(id) {
     return;
 }
 
+
 // Kontrola pro prazdneho textove pole na vstupu
 function wiewInputText(id) {
     if ($(id).val() !== "")
         return 1;
     return;
 }
+
 
 // Kontrola typu souboru u obrazku
 function controlFileImg(file) {
