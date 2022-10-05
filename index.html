@@ -5,19 +5,19 @@
     <meta charset="utf-8">
     <title>XKOSB</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
-    <link rel="stylesheet" href="css/style.css"> 
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 </head>
 
 <body>
-    <script src="js/navBar.js"></script>
     <script src="js/heplerFun.js"></script>
     <script src="js/steganografie.js"></script>
 
     <header>
-        <h1>Metody kódování, šifrování a bezpeč. dat <br>XKOSB</h1>
-        <h2>Autor: Radovan Němec <br>Osobní číslo: 22015</h2>
-
+        <h1>Metody kódování, šifrování a bezpeč. dat <br class="delete-br">XKOSB</h1>
+        <div class="user">
+            <h2>Autor: Radovan Němec <br>Osobní číslo: P22015</h2>
+        </div>
         <nav class="navbar">
             <ul class="nav-menu">
                 <li class="nav-item">
@@ -27,14 +27,45 @@
         </nav>
     </header>
 
-    <!-- ZAKODOVANI ZPRAVY DO OBRAZKU -->
 
-    <article id="encodeMessage" class="art">
-        <section class="one">
+
+    <article class="art">
+
+        <!-- ZAKODOVANI ZPRAVY DO OBRAZKU -->
+
+        <section class="one" id="encodeMessage">
             <h1>Zakódování zprávy do obrázku</h1>
+            <div class="container">
+                <p>
+                    Pro zakódování zprávy je potřeba nejprve vybrat libovolný obrázek ve formátu <strong>.JPG,
+                        .JPEG</strong> nebo <strong>.PNG bez průhledného pozadí</strong>.
+                </p>
+                <p>
+                    Následně po vybraném obrázku je potřeba zadat námy požadovaný text k zakódování, pote stačí
+                    zmáčknout tlačítko "<strong style="text-transform:uppercase">Provést zakódování</strong>".
+                </p>
+                <p>
+                    Pomocí funkcí v jazyce JavaScript proběhne zakódování zprávy do obrázku ve formátu
+                    <strong>.PNG</strong>, který poté stačí uložit do počítače.
+                </p>
+                <p>
+                    <strong>Uložení obrázku: </strong><br>
+                    - pomocí pravého kliknutí myši na obrázek a "<strong style="text-transform:uppercase">Uložit obrázek jako...</strong>".
+                </p>
+                <p>
+                    <strong style="color:red; text-transform:uppercase;">Upozornění:</strong><br>
+                    Je potřeba myslet na to, že čím bude <strong style="text-transform: uppercase;">větší</strong>
+                    obrázek nebo zpráva pro zakodování, tím bude
+                    <strong style="text-transform: uppercase;">delší</strong> průběh zakódovávání a také <strong
+                        style="text-transform: uppercase;">větší
+                    </strong> velikost výsledného obrázku.
+                    Aplikace má pár ošetření k zajištění lepší funkčnosti.
+                </p>
+            </div>
 
-            <div>
-                <input class="inputfile" type="file" name="baseImg" onchange="encodeImg()">
+
+            <div class="inputfile">
+                <input type="file" name="baseImg" onchange="encodeImg()">
             </div>
             <div class="original none">
                 <h3>Náhled obrázku</h3>
@@ -42,14 +73,16 @@
             </div>
             <div>
                 <h3>Náhled textové zprávy</h3>
-                <textarea id="msg" rows="3" cols="29" placeholder="Zde zadejte vaší zprávu..." oninput="binaryMsg()"></textarea>
+                <textarea id="msg" rows="3" cols="33" placeholder="Zde zadejte vaší zprávu..."
+                    oninput="binaryMsg()"></textarea>
             </div>
             <div class="binary none">
                 <h3>Náhled zprávy v binárním tvaru</h3>
-                <p></p>
+                <p class="preview-binary"></p>
             </div>
-            <div>
-                <button type="button" onclick="event.preventDefault(); encodeMessage()">Provést zakódování</button>
+            <div class="btn">
+                <button type="button" onclick="event.preventDefault(); encodeMessage()">Provést
+                    zakódování</button>
             </div>
             <div class="encoded none">
                 <h3>Výstupní obrázek se zašifrovánou zprávou</h3>
@@ -57,16 +90,27 @@
             </div>
         </section>
 
-    </article>
 
-    <!-- DEKODOVANI ZPRAVY Z OBRAZKU -->
 
-    <article class="art" id="decodeMsg">
-        <section class="two">
+        <!-- DEKODOVANI ZPRAVY Z OBRAZKU -->
 
-            <h2>Rozkódování zprávy z obrázku</h2>
+        <section class="two" id="decodeMsg">
 
-            <div>
+            <h1>Rozkódování zprávy z obrázku</h1>
+
+            <div class="container">
+                <p>
+                    Néjprve vybereme obrazek ze kódovanou zprávou.
+                </p>
+                <p>
+                    Po výběru obrázku stačí pouze zmáčknout tlačítko "<strong style="color:rgb(255, 96, 123); text-transform:uppercase">Provést rozkódování</strong>".
+                </p>
+                <p>
+                    <strong style="color:red; text-transform:uppercase;">Upozornění:</strong><br>
+                    Text nebude obsahovat diakritiku!
+                </p>
+            </div>
+            <div class="inputfile">
                 <input class="input-file" type="file" name="decodeFile" onchange="encodeImage()">
             </div>
             <div class="decode none">
@@ -74,18 +118,20 @@
                 <canvas></canvas>
             </div>
 
-            <div>
+            <div class="btn">
                 <button type="button" onclick="event.preventDefault(); decodeMsg()">Provést rozkódování</button>
             </div>
 
 
             <div class="binary-decode none">
                 <h3>Výstupní zpráva</h3>
-                <textarea rows="3" readonly></textarea>
+                <p class="preview-string"></p>
             </div>
 
         </section>
     </article>
 
+
 </body>
+
 </html>

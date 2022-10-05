@@ -205,6 +205,7 @@ function decodeMsg() {
     console.info(msg);
 
     // vypis desifrovane zpravy
-    $(".binary-decode textarea").text(msg);
+    $(".binary-decode p").text(msg);
     $(".binary-decode").removeClass("none");
 }
+
