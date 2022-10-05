@@ -46,7 +46,7 @@ function convertPasswordIntoKey(input) {
 }
 
 
-// Odstraneni diakritiky
+// odstraneni diakritiky
 function substitutionDiacritic(text) {
     text = text.split("");
     let special = "ÁáÉéĚěÍíÓóÚúŮůÝýŽžŠšČčŘřČčĎďŤťŇň";
@@ -63,7 +63,7 @@ function substitutionDiacritic(text) {
 }
 
 
-// Kontrola nevybraneho souboru
+// kontrola nevybraneho souboru
 function controlInputFile(id) {
     if ($("input[name=" + id + "]").get(0).files.length !== 0)
         return 1;
@@ -71,7 +71,7 @@ function controlInputFile(id) {
 }
 
 
-// Kontrola pro prazdneho textove pole na vstupu
+// kontrola pro prazdneho textove pole na vstupu
 function wiewInputText(id) {
     if ($(id).val() !== "")
         return 1;
@@ -79,7 +79,7 @@ function wiewInputText(id) {
 }
 
 
-// Kontrola typu souboru u obrazku
+// kontrola typu souboru u obrazku
 function controlFileImg(file) {
     if ($.inArray(file["type"], ["image/jpg", "image/jpeg", "image/png"]) > 0)
         return 1;
@@ -87,7 +87,7 @@ function controlFileImg(file) {
 }
 
 
-// Kontrola pruhlednosti pozadi u obrazku
+// kontrola pruhlednosti pozadi u obrazku
 function controlAlphaChannel(canvas, context) {
     let data = context.getImageData(0, 0, canvas[0].width, canvas[0].height).data;
     for (let i = 3; i < data.length; i += 4) {
