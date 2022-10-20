@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="utf-8">
+    <title>XKOSB</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
+    <link rel="stylesheet" href="css/styl.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+
+    <script src="js/crypto-identifier.js"></script>
+    <script src="js/enigmator.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+    <script type="text/javascript">
+        method = Enigmator.cryptanalysis.identify;
+    
+        function displayResult(result, type){
+            let noresult = false;
+    
+            if(type == "cipher"){
+                    
+                if(result.cipherAlgo !== undefined){
+                    let element = "";
+                    for(let i=0; i < result.cipherAlgo.length; i++){
+                        element += "<li>"+result.cipherAlgo[i]+"</li>";
+                    }
+                    $("#cipher-type span").text(result.possibleCipher);
+                    $("#cipher-type").show();
+                    $("#cipher-algo h5").text("Most Common Ciphers : ");
+                    $("#cipher-algo ul").html(element);
+                }
+                else {
+                    let element = "";
+                    for(let i=0; i < result.possibleCipher.length; i++){
+                        element += "<li>"+result.possibleCipher[i]+"</li>";
+                    }
+                    $("#cipher-type").hide();
+                    $("#cipher-algo h5").text("Possible Cipher : ");
+                    $("#cipher-algo ul").html(element);
+                }
+                if(result.possibleCipher.length < 1)
+                    noresult = true;
+                if(result.ic !== undefined){
+                    $("#cipher-ic").show();
+                    $("#cipher-ic span").text(result.ic);
+                    $("#div-cipher h6").show();
+                }
+                else {
+                    $("#cipher-ic").hide();
+                    $("#div-cipher h6").hide();
+                }
+            }
+            else if(type == "encoding"){
+                let element = "";
+                for(let i=0; i < result.possibleEnc.length; i++){
+                    element += "<li>"+result.possibleEnc[i]+"</li>";
+                }
+                $("#encoding-type").html(element);
+                if(result.possibleEnc.length < 1)
+                    noresult = true;
+            }
+            else if(type == "hash"){
+                var element = "";
+                for(var i=0; i < result.possibleHash.length; i++){
+                    element += "<li>"+result.possibleHash[i]+"</li>";
+                }
+                $("#hash-type").html(element);
+                if(result.possibleHash.length < 1)
+                    noresult = true;
+            }
+            $("#div-output").show();
+            $("#output > div").hide();
+            if(noresult){
+                $("#div-noresult").show();
+            }
+            else {
+                $("#div-"+type).show();
+            }
+        }
+    
+        $(document).ready(function(){
+    
+            $("#btn-identify").click(function(){
+    
+                let result = {};
+                let str = $("#input").val();
+                let type = $("#btn-type button span").text().toLowerCase();
+                
+                if(!$("#btn-input-file").hasClass("active")){
+                    if(!str){
+                        alert("Please, input text first.");
+                        return;
+                    }
+                    else if(str.length < 20 && type == "cipher"){
+                        alert("Input is too short to identify Cipher (min. 20 characters)");
+                        return;
+                    }
+                    result = method(str, type);
+                    displayResult(result, type);
+                }
+                else {
+                    readFile(file, function(e){
+                        input = arrayBufferToStr(e.target.result);
+                        result = method(input, type);
+                        displayResult(result, type);
+                    });
+                }
+                
+    
+                
+            })
+    
+            $("#btn-input-file").click(function(){
+                $("#div-input-upload").show();
+                $("#input").hide();
+            })
+    
+            $("#btn-input-raw").click(function(){
+                $("#div-input-upload").hide();
+                $("#input").show();
+            })
+    
+            $("#btn-clear").click(function(){
+                $("#div-output").hide();
+            })
+    
+        })
+    </script>
+</head>
+
+<body>
+    <!-- SKRIPT S POMOCNYMI FUNKCEMI A SYSTEMOVYM OSETRENIM -->
+    <script src="js/heplerFun.js"></script>
+    <!-- SKRIPT S FUNKCNI LOGIKOU PRO ZASIFROVANI A DESIFROVANI ZPRAVY DO A Z OBRAZKU -->
+    
+
+    <header>
+        <h1>Metody kódování, šifrování a bezpeč. dat <br class="delete-br">XKOSB</h1>
+        <div class="user">
+            <h2>Autor: Radovan Němec <br>Osobní číslo: P22015</h2>
+        </div>
+        <nav class="navbar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a class="nav-link active" href="index.html">Kor. úkol č.1</a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="kor2.html">Kor. úkol č.2</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+
+
+    <article class="art">
+
+        <!-- ZAKODOVANI ZPRAVY DO OBRAZKU -->
+<!--
+        <section class="one" id="encodeMessage">
+            <h1>Zakódování zprávy do obrázku</h1>
+            <div class="container">
+
+            </div>
+        </section>
+
+-->
+
+        <!-- DEKODOVANI ZPRAVY Z OBRAZKU -->
+<!--
+        <section class="two" id="decodeMsg">
+
+            <h1>Rozkódování zprávy z obrázku</h1>
+
+            <div class="container">
+
+            </div>
+
+            <div class="btn">
+                <button type="button" onclick="event.preventDefault(); decodeMsg()">Provést rozkódování</button>
+            </div>
+
+            
+            <div class="binary-decode none">
+                <h3>Výstupní zpráva</h3>
+                <p class="preview-string"></p>
+            </div>
+
+        </section>
+    </article>
+-->
+   
+<div class="content">
+	<center><div class="main">
+		<div class="title">
+			<h2>Crypto Identifier</h2>
+		</div>
+
+		<div class="clear"></div>
+
+		<h5 class="left">Input :</h5>
+		<div class="toggle-button">
+			<button id="btn-input-raw" class="grey active small">Text</button>
+			<button id="btn-input-file" class="grey small">File</button>
+		</div>
+		<div class="clear"></div>
+		<textarea id="input" autofocus="" spellcheck="false" placeholder="Put any cryptic text such as Ciphertext, unknown Encoding, or even Hash"></textarea>
+		<input type="file" id="inputFile" class="hide">
+		<div class="input-upload hide" id="div-input-upload">
+			<label for="inputFile" class="button blue large">
+				Select File
+			</label>
+			<h5>No file selected</h5>
+		</div>
+		<div class="clear"></div>
+		<h6><i>Note : This tool can't identify Modern Cipher</i></h6>
+
+		<button id="btn-identify" class="blue large left">Identify</button>
+		<button id="btn-clear" class="grey left large">Clear</button>
+		<div id="btn-type" class="select left">
+			<button class="grey">Identify for : <span>Cipher</span></button>
+			<ul class="option">
+				<li>Cipher</li>
+				<li>Encoding</li>
+				<li>Hash</li>
+			</ul>
+		</div>
+		<div class="clear"></div>
+
+		<div id="div-output" class="hide">
+			<h5>Output :</h5>
+			<div id="output">
+				<div id="div-cipher" class="hide">
+					<h5 id="cipher-type">Possible Cipher Type :  <span></span></h5>
+					<h5 id="cipher-ic">Index of Coincidence :  <span></span></h5>
+					<div id="cipher-algo">
+						<h5>Most Common Ciphers : </h5>
+						<ul></ul>
+					</div>
+					<div class="space"></div>
+					<h6><i>Note : This was calculated based on normal English text</i></h6>
+				</div>
+
+				<div id="div-encoding" class="hide">
+					<h5>Possible Encoding : </h5>
+					<ul id="encoding-type"></ul>
+				</div>
+
+				<div id="div-hash" class="hide">
+					<h5>Possible Hash : </h5>
+					<ul id="hash-type"></ul>
+					<!---<h5>Other Possible Hash : </h5>
+					<ul id="hash-other"></ul>-->
+				</div>
+
+				<div id="div-noresult" class="hide">
+					<h5><span>No result found.</span></h5>
+				</div>
+			</div>
+		</div>
+	</div></center>
+	</div>
+    <span class="px-viewport-dimensions px-viewport-dimensions--hidden tl"></span>
+
+</body>
+</html>
