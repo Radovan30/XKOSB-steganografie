@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="utf-8">
+    <title>XKOSB</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+</head>
+
+<body>
+    <!-- SKRIPT S POMOCNYMI FUNKCEMI A SYSTEMOVYM OSETRENIM -->
+    <script src="js/heplerFun.js"></script>
+    <!-- SKRIPT S FUNKCNI LOGIKOU PRO ZASIFROVANI A DESIFROVANI ZPRAVY DO A Z OBRAZKU -->
+    <script src="js/steganografie.js"></script>
+
+    <header>
+        <h1>Metody kódování, šifrování a bezpeč. dat <br class="delete-br">XKOSB</h1>
+        <div class="user">
+            <h2>Autor: Radovan Němec <br>Osobní číslo: P22015 <br><strong style="color:red; text-transform:uppercase;">Korespondenční úloha č.2</strong></h2>
+        </div>
+        <nav class="navbar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Vigenerova šifra</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="analysis.html">Frekvenční analýza</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <h1 style="color:black;">FREKVENČNÍ ANALÝZA A IDENTIFIKACE ŠIFRY</h1>
+
+    <article class="art_2">
+
+        <!-- POPIS FUNKCNOSTI A IDENTIFIKACE SIFRY -->
+
+        <section class="one">
+            <h1>Identifikace šifry a posis funkčnosti</h1>
+            <div class="container">
+                <p>
+                    Pro zakódování zprávy je potřeba nejprve vybrat libovolný obrázek ve formátu <strong>.JPG,
+                        .JPEG</strong> nebo <strong>.PNG bez průhledného pozadí</strong>.
+                </p>
+                <p>
+                    Po vybrání obrázku je potřeba zadat požadovaný text k zakódování a zmáčknout tlačítko "<strong style="text-transform:uppercase">Provést zakódování</strong>".
+                </p>
+                <p>
+                    Pomocí funkcí v jazyce JavaScript proběhne zakódování zprávy do obrázku ve formátu
+                    <strong>.PNG</strong>, který poté stačí uložit do počítače kliknutím pravého tlačítka myši na obrázek a zvolením "<strong style="text-transform:uppercase">Uložit obrázek
+                        jako...</strong>".
+                </p>
+                <p>
+                    <strong style="color:red; text-transform:uppercase;">Upozornění:</strong><br> Je potřeba myslet na to, že čím <strong style="text-transform: uppercase;">větší</strong> obrázek nebo zpráva pro zakodování bude, tím bude
+                    <strong style="text-transform: uppercase;">delší</strong> průběh zakódovávání a také <strong style="text-transform: uppercase;">větší
+                    </strong> velikost výsledného obrázku.
+                </p>
+            </div>
+
+
+
+        </section>
+
+
+        <!--  FREKVENCNI ANALYZA -->
+
+        <section class="two">
+
+            <h1>Frekvenční analýza</h1>
+
+            <div>
+                <textarea id="cipher" rows="6" cols="76" placeholder="Zde vložte zašifrovanou zprávu...">DJ DK C QLXDWI WF SDGDU PCX. XLRLU KQCSLKBDQK, KJXDHDET FXWZ C BDIILE RCKL, BCGL PWE JBLDX FDXKJ GDSJWXO CTCDEKJ JBL LGDU TCUCSJDS LZQDXL. IYXDET JBL RCJJUL, XLRLU KQDLK ZCECTLI JW KJLCU KLSXLJ QUCEK JW JBL LZQDXL’K YUJDZCJL PLCQWE, JBL ILCJB KJCX, CE CXZWXLI KQCSL KJCJDWE PDJB LEWYTB QWPLX JW ILKJXWO CE LEJDXL QUCELJ. QYXKYLI RO JBL LZQDXL’K KDEDKJLX CTLEJK, QXDESLKK ULDC XCSLK BWZL CRWCXI BLX KJCXKBDQ, SYKJWIDCE WF JBL KJWULE QUCEK JBCJ SCE KCGL BLX QLWQUL CEI XLKJWXL FXLLIWZ JW JBL TCUCVO…</textarea>
+            </div>
+
+            <div class="container-table">
+                <h3>Frekvence písmen v ANGLIČTINĚ</h3>
+                <table cellspacing="0">
+                    <tr class="chartPercentagesAng">
+                        <td> 8.17%</td>
+                        <td> 1.49%</td>
+                        <td> 2.78%</td>
+                        <td> 4.25%</td>
+                        <td> 12.70%</td>
+                        <td> 2.23%</td>
+                        <td> 2.02%</td>
+                        <td> 6.09%</td>
+                        <td> 6.97%</td>
+                        <td> 0.15%</td>
+                        <td> 0.77%</td>
+                        <td> 4.03%</td>
+                        <td> 2.41%</td>
+                        <td> 6.75%</td>
+                        <td> 7.51%</td>
+                        <td> 1.93%</td>
+                        <td> 0.10%</td>
+                        <td> 5.99%</td>
+                        <td> 6.33%</td>
+                        <td> 9.06%</td>
+                        <td> 2.76%</td>
+                        <td> 0.98%</td>
+                        <td> 2.36%</td>
+                        <td> 0.15%</td>
+                        <td> 1.97%</td>
+                        <td> 0.07%</td>
+                    </tr>
+                    <tr class="chartLabelsAng">
+                        <td>A</td>
+                        <td>B</td>
+                        <td>C</td>
+                        <td>D</td>
+                        <td>E</td>
+                        <td>F</td>
+                        <td>G</td>
+                        <td>H</td>
+                        <td>I</td>
+                        <td>J</td>
+                        <td>K</td>
+                        <td>L</td>
+                        <td>M</td>
+                        <td>N</td>
+                        <td>O</td>
+                        <td>P</td>
+                        <td>Q</td>
+                        <td>R</td>
+                        <td>S</td>
+                        <td>T</td>
+                        <td>U</td>
+                        <td>V</td>
+                        <td>W</td>
+                        <td>X</td>
+                        <td>Y</td>
+                        <td>Z</td>
+                    </tr>
+                </table>
+
+                <div class="tlacitko">
+                    <button class="Button" onclick="frequencyAnalysis(document.getElementById('cipher').value);">Start
+                        Frekvenční analýzy</button>
+                </div>
+                <div class="container-table">
+                    <table cellspacing="0">
+                        <tr class="columnChart">
+                            <td id="graph_a"></td>
+                            <td id="graph_b"></td>
+                            <td id="graph_c"></td>
+                            <td id="graph_d"></td>
+                            <td id="graph_e"></td>
+                            <td id="graph_f"></td>
+                            <td id="graph_g"></td>
+                            <td id="graph_h"></td>
+                            <td id="graph_i"></td>
+                            <td id="graph_j"></td>
+                            <td id="graph_k"></td>
+                            <td id="graph_l"></td>
+                            <td id="graph_m"></td>
+                            <td id="graph_n"></td>
+                            <td id="graph_o"></td>
+                            <td id="graph_p"></td>
+                            <td id="graph_q"></td>
+                            <td id="graph_r"></td>
+                            <td id="graph_s"></td>
+                            <td id="graph_t"></td>
+                            <td id="graph_u"></td>
+                            <td id="graph_v"></td>
+                            <td id="graph_w"></td>
+                            <td id="graph_x"></td>
+                            <td id="graph_y"></td>
+                            <td id="graph_z"></td>
+                        </tr>
+                        <tr class="chartPercentages">
+                            <td id=percent_a></td>
+                            <td id=percent_b></td>
+                            <td id=percent_c></td>
+                            <td id=percent_d></td>
+                            <td id=percent_e></td>
+                            <td id=percent_f></td>
+                            <td id=percent_g></td>
+                            <td id=percent_h></td>
+                            <td id=percent_i></td>
+                            <td id=percent_j></td>
+                            <td id=percent_k></td>
+                            <td id=percent_l></td>
+                            <td id=percent_m></td>
+                            <td id=percent_n></td>
+                            <td id=percent_o></td>
+                            <td id=percent_p></td>
+                            <td id=percent_q></td>
+                            <td id=percent_r></td>
+                            <td id=percent_s></td>
+                            <td id=percent_t></td>
+                            <td id=percent_u></td>
+                            <td id=percent_v></td>
+                            <td id=percent_w></td>
+                            <td id=percent_x></td>
+                            <td id=percent_y></td>
+                            <td id=percent_z></td>
+                        </tr>
+                        <tr class="chartLabels">
+                            <td>A</td>
+                            <td>B</td>
+                            <td>C</td>
+                            <td>D</td>
+                            <td>E</td>
+                            <td>F</td>
+                            <td>G</td>
+                            <td>H</td>
+                            <td>I</td>
+                            <td>J</td>
+                            <td>K</td>
+                            <td>L</td>
+                            <td>M</td>
+                            <td>N</td>
+                            <td>O</td>
+                            <td>P</td>
+                            <td>Q</td>
+                            <td>R</td>
+                            <td>S</td>
+                            <td>T</td>
+                            <td>U</td>
+                            <td>V</td>
+                            <td>W</td>
+                            <td>X</td>
+                            <td>Y</td>
+                            <td>Z</td>
+                        </tr>
+                        <tr class="substitution">
+                            <td><input type=text id="sub_a" maxlength=1></td>
+                            <td><input type=text id="sub_b" maxlength=1></td>
+                            <td><input type=text id="sub_c" maxlength=1></td>
+                            <td><input type=text id="sub_d" maxlength=1></td>
+                            <td><input type=text id="sub_e" maxlength=1></td>
+                            <td><input type=text id="sub_f" maxlength=1></td>
+                            <td><input type=text id="sub_g" maxlength=1></td>
+                            <td><input type=text id="sub_h" maxlength=1></td>
+                            <td><input type=text id="sub_i" maxlength=1></td>
+                            <td><input type=text id="sub_j" maxlength=1></td>
+                            <td><input type=text id="sub_k" maxlength=1></td>
+                            <td><input type=text id="sub_l" maxlength=1></td>
+                            <td><input type=text id="sub_m" maxlength=1></td>
+                            <td><input type=text id="sub_n" maxlength=1></td>
+                            <td><input type=text id="sub_o" maxlength=1></td>
+                            <td><input type=text id="sub_p" maxlength=1></td>
+                            <td><input type=text id="sub_q" maxlength=1></td>
+                            <td><input type=text id="sub_r" maxlength=1></td>
+                            <td><input type=text id="sub_s" maxlength=1></td>
+                            <td><input type=text id="sub_t" maxlength=1></td>
+                            <td><input type=text id="sub_u" maxlength=1></td>
+                            <td><input type=text id="sub_v" maxlength=1></td>
+                            <td><input type=text id="sub_w" maxlength=1></td>
+                            <td><input type=text id="sub_x" maxlength=1></td>
+                            <td><input type=text id="sub_y" maxlength=1></td>
+                            <td><input type=text id="sub_z" maxlength=1></td>
+                        </tr>
+                    </table>
+
+                    <div class="tlacitko">
+                        <button class="Button " onclick="substituteLetters();">Zaměň písmena</button>
+                    </div>
+                    <div>
+                        <h3>Zpráva po záměně písmen</h3>
+                        <textarea id="plain" rows="12 " cols="76 "></textarea>
+                    </div>
+                </div>
+
+        </section>
+    </article>
+
+    <script src="js/frequencyAnalysis.js "></script>
+</body>
+
+</html>
